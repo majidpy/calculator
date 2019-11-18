@@ -18,6 +18,9 @@ namespace Calculator
         }
         public float n1 = 0, n2 = 0;
         public int oprClickCount = 0;
+        public Button opr;
+        public bool OprClick = false;
+
         private void Form1_Load(object sender, EventArgs e)
         {
             // all the textbox, button, etc are controls 
@@ -42,40 +45,51 @@ namespace Calculator
 
             if (isOperator(button))
             {
+                
                 if (oprClickCount == 0)
                 {
                     oprClickCount++;
                     n1 = float.Parse(textBox1.Text);
-                    textBox1.Text = " ";
+                    textBox1.Text = "";
+                    opr = button;
+                    
                 }
                 else
                 {
                     n2 = float.Parse(textBox1.Text);
-                    float results = calc(n1, n2, button);
+                    float results = calc(n1, n2, opr);
                     textBox1.Text = results.ToString();
-                    n1 = results;
+                    opr = button;
+                    OprClick = true;
+
                 }
                 
-                
-
             }
             else
             {
+                if (OprClick)
+                {
+                    n1 = float.Parse(textBox1.Text);
+                    textBox1.Text = "";
+                }
                 if (!textBox1.Text.Contains("."))
                 {
                     if (textBox1.Text.Equals("0") && !button.Text.Equals("."))
                     {
                         textBox1.Text = button.Text;
+                        OprClick = false;
                     }
                     else
                     {
                         textBox1.Text += button.Text;
+                        OprClick = false;
                     }
                     
                 }
                 else if (!button.Text.Equals("."))
                 {
                     textBox1.Text += button.Text;
+                    OprClick = false;
                 }
 
             }
@@ -97,8 +111,10 @@ namespace Calculator
 
         public float calc(float n1, float n2,  Button b)
         {
-            float result = 0;
-            switch (b.Text)
+            float result = 15;
+            String opr = b.Text;
+
+            switch (opr)
             {
                 case "+":
                     result =  n1 + n2;
